@@ -44,11 +44,9 @@ except:
 
 # TODO: remove this once sorl-thumbnail 12.6.0 released to PyPI
 # setuptools cannot handle the syntax for an editable dependency as provided
-# by requirements.txt (specifically the "-e" portion). This parses those
-# lines to create an appropriate list for install_requires and populates the
-# needed dependency_links.
+# by requirements.txt (requires a "package-name @ url" format). This parses
+# impacted lines to create an appropriate REQUIREMENTS list.
 REQUIREMENTS = REQUIREMENTS.splitlines()
-DEPENDENCY_LINKS = []
 
 for index, line in enumerate(REQUIREMENTS):
     if line.startswith('-e git'):
@@ -57,8 +55,7 @@ for index, line in enumerate(REQUIREMENTS):
         # Removes "-e " from link (always the first 3 characters)
         link = editable_link[3:]
 
-        REQUIREMENTS[index] = requirement
-        DEPENDENCY_LINKS.append(link)
+        REQUIREMENTS[index] = '%s @ %s' % (requirement, link)
 
 setup(
     name='django-newsletter',
@@ -71,8 +68,6 @@ setup(
     ),
     long_description=README,
     install_requires=REQUIREMENTS,
-    # TODO: remove this once sorl-thumbnail 12.6.0 released
-    dependency_links=DEPENDENCY_LINKS,
     license='AGPL',
     author='Mathijs de Bruin',
     author_email='mathijs@mathijsfietst.nl',

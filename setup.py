@@ -49,7 +49,7 @@ except:
 REQUIREMENTS = REQUIREMENTS.splitlines()
 
 for index, line in enumerate(REQUIREMENTS):
-    if line.startswith('-e git'):
+    if line.startswith('-e '):
         # Splits into the link and the package name
         editable_link, requirement = line.split('#egg=')
         # Removes "-e " from link (always the first 3 characters)

@@ -8,4 +8,6 @@ six
 # Pinning to specific commit (the 12.6.0 release), which is not yet on PyPI
 -e git://github.com/jazzband/sorl-thumbnail@13bedfb7d2970809eda597e3ef79318a6fa80ac2#egg=sorl-thumbnail
 unicodecsv<0.15
-Pillow
+Pillow==6.2.1;python_version=="2.7"
+Pillow==5.4;python_version=="3.4"
+Pillow>=7;python_version>="3.5"

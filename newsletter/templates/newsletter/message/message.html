@@ -1,4 +1,4 @@
-{% load i18n %}<!DOCTYPE html>
+{% load i18n newsletter_thumbnails %}<!DOCTYPE html>
 
 <html>
 <head>
@@ -9,9 +9,10 @@
     <h1>{{ newsletter.title }}</h1>
     <h2>{{ message.title }}</h2>
     {% for article in message.articles.all %}
+        {% newsletter_thumbnail article.image as thumbnail %}
         <h3>{{ article.title }}</h3>
 
-        <img src="{{ article.image.thumbnail }}">
+        <img src="{{ thumbnail }}">
 
         <div>{{ article.text|safe }}</div>
 

@@ -16,9 +16,8 @@ Installation
     keep your Python environment somewhat clean.)
 
 #)  Add newsletter to ``INSTALLED_APPS`` in settings.py and make sure that
-    your favourite rich text widget (optional), some Django contrib dependencies
-    and `sorl-thumbnail <http://sorl-thumbnail.readthedocs.org/en/latest/installation.html>`_
-    are in there as well::
+    your favourite rich text widget (optional) and some Django contrib
+    dependencies are in there as well::
 
         INSTALLED_APPS = (
             'django.contrib.contenttypes',
@@ -28,7 +27,6 @@ Installation
             ...
             # Imperavi (or tinymce) rich text editor is optional
             # 'imperavi',
-            'sorl.thumbnail',
             ...
             'newsletter',
             ...

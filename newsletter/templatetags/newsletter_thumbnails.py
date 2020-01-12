@@ -19,7 +19,7 @@ class ThumbnailNode(Node):
     def _create_thumbnail_file_path(self, file_name):
         """Creates path for thumbnail.
 
-            Recreates the original image's media folder so it can
+            Recreates the original image's media folder so it can be
             uploaded to the same folder.
         """
         # Break path into head and tail
@@ -32,11 +32,11 @@ class ThumbnailNode(Node):
         image_folder_parts = str(image_folders).split(os.path.sep)
 
         # Reconstruct the media folder for the original image
-        # Will need the last 5 parts (all files are uploaded with the
+        # Uses the last 5 items because all files are uploaded with the
         # same structure: newsletter/images/<year>/<month>/<day>)
         media_folder_path = image_folder_parts[-5:]
 
-        # Combine media path parts and image name
+        # Combine media path parts and image name into one list
         thumbnail_path_parts = media_folder_path + [image_name]
 
         # Return the joined path and thumbnail name
@@ -46,7 +46,6 @@ class ThumbnailNode(Node):
 
     def _get_or_create_thumbnail(self, source_file):
         """Resizes, saves, and retrieves thumbnails."""
-        # Get the thumbnail path
         thumbnail_path = self._create_thumbnail_file_path(source_file.name)
 
         # Check if thumbnail needs to be created
@@ -59,6 +58,7 @@ class ThumbnailNode(Node):
             original_image.thumbnail((128, 128))
 
             # Save the image to the bytes object
+            # TODO: add handling to support native format
             original_image.save(thumbnail_io, format='JPEG')
 
             # Save the bytes object as a Django File
@@ -78,13 +78,13 @@ class ThumbnailNode(Node):
         # Assign the URL to the context variable
         context[self.context_variable] = thumbnail_url
 
-        return ''
+        return '' # method expects string return value
 
 @register.tag
 def newsletter_thumbnail(parser, token):
     """Takes the provided ImageFile and returns a thumbnail URL."""
     # Split the tag into its components
-    # Index 1 = image argument; 2 = context variable
+    # Second item = image argument; last item = context variable
     tag_args = token.split_contents()
 
     # Retrieve the source image argument as a filter expression

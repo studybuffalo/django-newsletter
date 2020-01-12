@@ -5,4 +5,8 @@ chardet
 surlex>=0.2.0
 six
 unicodecsv<0.15
-Pillow
+# https://pillow.readthedocs.io/en/stable/installation.html#notes
+Pillow==6.2;python_version=="2.7"
+Pillow==5.4;python_version=="3.4"
+Pillow>=7;python_version>="3.5"
+

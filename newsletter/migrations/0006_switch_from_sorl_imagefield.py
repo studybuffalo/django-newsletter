@@ -1,6 +1,5 @@
 """Migrations to switch from sorl ImageField to a new package field."""
-from django.db import migrations
-import newsletter.fields
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
@@ -12,7 +11,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='article',
             name='image',
-            field=newsletter.fields.ThumbnailImageField(
+            field=models.ImageField(
                 blank=True,
                 null=True,
                 upload_to='newsletter/images/%Y/%m/%d',

@@ -1,6 +1,13 @@
 """Tests for the templatetags module."""
 from io import BytesIO
-import tempfile
+from shutil import rmtree
+
+# Conditionally import for Python 2.7 support
+try:
+    from tempfile import TemporaryDirectory as TempDir
+except ImportError:
+    import tempfile
+    TempDir = None
 
 from PIL import Image
 
@@ -15,8 +22,20 @@ from newsletter.models import (
 from .utils import MailTestCase
 
 
+class TemporaryDirectory:
+    """Mimicks TemporaryDirectory to give Python 2 and 3 support."""
+    def __init__(self):
+        if TempDir:
+            temp_dir = TempDir()
+            self.name = temp_dir.name
+        else:
+            self.name = tempfile.mkdtemp()
+
+    def __exit__(self, exc, value, traceback):
+        rmtree(self.name)
+
 # Create temporary directory for created media files
-TEMP_DIR = tempfile.TemporaryDirectory()
+TEMP_DIR = TemporaryDirectory()
 TEMP_DIR_PATH = TEMP_DIR.name
 
 @override_settings(MEDIA_ROOT=TEMP_DIR_PATH)

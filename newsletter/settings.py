@@ -102,4 +102,70 @@ class NewsletterSettings(Settings):
 
         return None
 
+    @property
+    def THUMBNAIL(self):
+        """Validates and returns the set thumbnail application."""
+        SUPPORTED_THUMBNAILERS = [
+            'sorl-thumbnail',
+            'easy-thumbnails',
+        ]
+        THUMBNAIL = getattr(
+            django_settings, "NEWSLETTER_THUMBNAIL", None
+        )
+
+        # Checks that the user entered a value
+        if THUMBNAIL is None:
+            return None
+
+        # Checks for a supported thumbnailer
+        if THUMBNAIL in SUPPORTED_THUMBNAILERS:
+            return THUMBNAIL
+
+        # Otherwise user has not set thumbnailer correctly
+        raise ImproperlyConfigured(
+            "'%s' is not a supported thumbnail application." % THUMBNAIL
+        )
+
+    @property
+    def THUMBNAIL_MODEL_FIELD(self):
+        """Returns the model to use for the Artical image field.
+
+            If the user has a supported thumbnail generally, returns
+            the appropriate model field. Otherwise, will see if the
+            user has manually specified a path to a model field.
+        """
+        # Checks if user has specified a general thumbnail application
+        if self.THUMBNAIL == 'sorl-thumbnail':
+            from sorl.thumbnail.fields import ImageField
+
+            return ImageField
+
+        if self.THUMBNAIL == 'easy-thumbnails':
+            from easy_thumbnails.fields import ThumbnailerImageField
+
+            return ThumbnailerImageField
+
+        # Get the user-defined setting (if present)
+        NEWSLETTER_THUMBNAIL_MODEL_FIELD = getattr(
+            django_settings, "NEWSLETTER_THUMBNAIL_MODEL_FIELD", None
+        )
+
+        if NEWSLETTER_THUMBNAIL_MODEL_FIELD:
+            try:
+                # Split user-defined path to the module and the class
+                module, attr = NEWSLETTER_THUMBNAIL_MODEL_FIELD.rsplit(".", 1)
+
+                # Dynamically import the module and return a class reference
+                mod = import_module(module)
+                return getattr(mod, attr)
+            except (ValueError, ImportError) as e:
+                raise ImproperlyConfigured(
+                    "Error while importing setting "
+                    "NEWSLETTER_THUMBNAIL_MODEL_FIELD %r: %s" % (
+                        NEWSLETTER_THUMBNAIL_MODEL_FIELD, e
+                    )
+                )
+
+        return None
+
 newsletter_settings = NewsletterSettings()

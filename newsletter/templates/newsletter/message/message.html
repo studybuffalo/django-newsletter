@@ -1,4 +1,4 @@
-{% load i18n newsletter_thumbnails %}<!DOCTYPE html>
+{% load i18n  %}<!DOCTYPE html>
 
 <html>
 <head>
@@ -9,10 +9,15 @@
     <h1>{{ newsletter.title }}</h1>
     <h2>{{ message.title }}</h2>
     {% for article in message.articles.all %}
-        {% newsletter_thumbnail article.image as thumbnail %}
         <h3>{{ article.title }}</h3>
 
-        <img src="{{ thumbnail }}">
+        {% if thumbnail_app == 'sorl-thumbnail' %}
+            {% include 'newsletter/message/message_article_sorl_thumbnail.html' %}
+        {% elif thumbnail_app == 'easy-thumbnails' %}
+            {% include 'newsletter/message/message_article_easy_thumbnails.html' %}
+        {% else %}
+            {% include 'newsletter/message/message_article_newsletter_thumbnail.html' %}
+        {% endif %}
 
         <div>{{ article.text|safe }}</div>
 

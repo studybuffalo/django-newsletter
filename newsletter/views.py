@@ -595,7 +595,8 @@ class SubmissionArchiveDetailView(SubmissionViewBase, DateDetailView):
             'site': Site.objects.get_current(),
             'date': self.object.publish_date,
             'STATIC_URL': settings.STATIC_URL,
-            'MEDIA_URL': settings.MEDIA_URL
+            'MEDIA_URL': settings.MEDIA_URL,
+            'thumbnail_app': newsletter_settings.THUMBNAIL,
         })
 
         return context

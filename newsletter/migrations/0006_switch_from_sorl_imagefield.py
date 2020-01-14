@@ -1,5 +1,7 @@
-"""Migrations to switch from sorl ImageField to a new package field."""
-from django.db import migrations, models
+"""Migrations to switch from sorl ImageField to a new dynamic field."""
+from django.db import migrations
+
+from newsletter.fields import DynamicImageField
 
 
 class Migration(migrations.Migration):
@@ -11,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='article',
             name='image',
-            field=models.ImageField(
+            field=DynamicImageField(
                 blank=True,
                 null=True,
                 upload_to='newsletter/images/%Y/%m/%d',

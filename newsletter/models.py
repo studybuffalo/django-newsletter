@@ -18,6 +18,7 @@ from django.utils.timezone import now
 
 
 from .compat import get_context, reverse
+from .fields import DynamicImageField
 from .utils import (
     make_activation_code, get_default_sites, ACTIONS
 )
@@ -413,7 +414,7 @@ class Article(models.Model):
     )
 
     # Make this a foreign key for added elegance
-    image = models.ImageField(
+    image = DynamicImageField(
         upload_to='newsletter/images/%Y/%m/%d', blank=True, null=True,
         verbose_name=_('image')
     )

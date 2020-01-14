@@ -55,7 +55,7 @@ class ThumbnailNode(Node):
 
             # Open the image and resize it
             original_image = Image.open(source_file)
-            original_image.thumbnail((128, 128))
+            original_image.thumbnail((200, 200))
 
             # Save the image to the bytes object
             # TODO: add handling to support native format

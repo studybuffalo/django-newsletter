@@ -233,7 +233,7 @@ if newsletter_settings.THUMBNAIL == 'sorl-thumbnail':
 else:
     ArticleInlineClassTuple = (StackedInline,)
 
-BaseArticleInline = type('BaseArticleInline', ArticleInlineClassTuple, {})
+BaseArticleInline = type(str('BaseArticleInline'), ArticleInlineClassTuple, {})
 
 class ArticleInline(BaseArticleInline):
     model = Article

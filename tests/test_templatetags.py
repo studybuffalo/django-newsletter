@@ -86,6 +86,7 @@ class ArticleTestCase(MailTestCase):
         )
 
     def test_tag_outputs_thubmnail_url(self):
+        """Confirms an expected image URL is provided."""
         template = Template(
             '{% load newsletter_thumbnails %}'
             '{% for article in message.articles.all %}'

@@ -8,7 +8,7 @@ except ImportError:
 
 try:
     from easy_thumbnails.fields import ThumbnailerImageField
-except ImportError:
+except (ImportError, RuntimeError):
     pass
 
 from .settings import newsletter_settings

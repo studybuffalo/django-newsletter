@@ -601,7 +601,7 @@ class SubmissionArchiveDetailView(SubmissionViewBase, DateDetailView):
             )
         else:
             thumbnail_template = (
-                'newsletter/message/thumbnail/newsletter.html'
+                'newsletter/message/thumbnail/django_newsletter.html'
             )
 
         context.update({

@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 import logging
-logger = logging.getLogger(__name__)
 
 import six
 
@@ -21,6 +20,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 
 from django.utils.html import format_html
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _, ungettext
 from django.utils.formats import date_format
 
@@ -32,13 +32,20 @@ except ImportError:  # Django < 1.10
     from django.views.i18n import javascript_catalog
     HAS_CBV_JSCAT = False
 
-from sorl.thumbnail.admin import AdminImageMixin
+# Thumbnail apps are optional so imports do not need to pass
+try:
+    from sorl.thumbnail.admin import AdminImageMixin
+except ImportError:
+    pass
+
+try:
+    from easy_thumbnails.widgets import ImageClearableFileInput
+except ImportError:
+    pass
 
 from .models import (
     Newsletter, Subscription, Article, Message, Submission
 )
-
-from django.utils.timezone import now
 
 from .admin_forms import (
     SubmissionAdminForm, SubscriptionAdminForm, ImportForm, ConfirmForm,
@@ -48,7 +55,12 @@ from .admin_utils import ExtendibleModelAdminMixin, make_subscription
 
 from .compat import get_context, reverse
 
+from .fields import DynamicImageField
+
 from .settings import newsletter_settings
+
+
+logger = logging.getLogger(__name__)
 
 # Contsruct URL's for icons
 ICON_URLS = {
@@ -213,8 +225,17 @@ if (
             'Imperavi WYSIWYG text editor might not work.'
         )
 
+# Creates a base class for the ArticleInline to inherit depending on
+# if the user has decided to use sorl-thumbnail or not.
+# https://sorl-thumbnail.readthedocs.io/en/latest/examples.html#admin-examples
+if newsletter_settings.THUMBNAIL == 'sorl-thumbnail':
+    ArticleInlineClassTuple = (AdminImageMixin, StackedInline)
+else:
+    ArticleInlineClassTuple = (StackedInline,)
 
-class ArticleInline(AdminImageMixin, StackedInline):
+BaseArticleInline = type("BaseArticleInline", ArticleInlineClassTuple, {})
+
+class ArticleInline(BaseArticleInline):
     model = Article
     extra = 2
     formset = ArticleFormSet
@@ -228,10 +249,21 @@ class ArticleInline(AdminImageMixin, StackedInline):
         }),
     )
 
+    # Perform any formfield overrides depending on specified settings
+    _formfield_overrides = {}
+
     if newsletter_settings.RICHTEXT_WIDGET:
-        formfield_overrides = {
+        _formfield_overrides = {
             models.TextField: {'widget': newsletter_settings.RICHTEXT_WIDGET},
         }
+
+    # https://easy-thumbnails.readthedocs.io/en/latest/usage/#forms
+    if newsletter_settings.THUMBNAIL == 'easy-thumbnails':
+        _formfield_overrides = {
+            DynamicImageField: {'widget': ImageClearableFileInput}
+        }
+
+    formfield_overrides = _formfield_overrides
 
 
 class MessageAdmin(NewsletterAdminLinkMixin, ExtendibleModelAdminMixin,

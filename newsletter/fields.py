@@ -22,4 +22,4 @@ elif newsletter_settings.THUMBNAIL == 'easy-thumbnails':
 else:
     ParentClass = ImageField
 
-DynamicImageField = type("DynamicImageField", (ParentClass,), {})
+DynamicImageField = type('DynamicImageField', (ParentClass,), {})

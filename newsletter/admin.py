@@ -40,7 +40,7 @@ except ImportError:
 
 try:
     from easy_thumbnails.widgets import ImageClearableFileInput
-except ImportError:
+except (ImportError, RuntimeError):
     pass
 
 from .models import (
@@ -226,7 +226,7 @@ if (
         )
 
 # Creates a base class for the ArticleInline to inherit depending on
-# if the user has decided to use sorl-thumbnail or not.
+# if the user has decided to use sorl-thumbnail or not
 # https://sorl-thumbnail.readthedocs.io/en/latest/examples.html#admin-examples
 if newsletter_settings.THUMBNAIL == 'sorl-thumbnail':
     ArticleInlineClassTuple = (AdminImageMixin, StackedInline)

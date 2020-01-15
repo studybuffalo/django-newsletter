@@ -17,7 +17,7 @@ class ThumbnailNode(Node):
         self.context_variable = context_variable
 
     def _create_thumbnail_file_path(self, file_name):
-        """Creates path for thumbnail.
+        """Creates path to retrieve/save the thumbnail.
 
             Recreates the original image's media folder so it can be
             uploaded to the same folder.
@@ -44,6 +44,21 @@ class ThumbnailNode(Node):
             os.path.sep.join(thumbnail_path_parts), image_extension
         )
 
+    def _get_pillow_format(self, thumbnail):
+        """Converts thumbnail format to an acceptable Pillow format."""
+        _, raw_extension = os.path.splitext(thumbnail)
+
+        # Remove "." from front of extension
+        extension = raw_extension[1:]
+
+        # If necessary convert extension to Pillow format
+        pillow_conversions = {
+            'jpg': 'JPEG'
+        }
+        extension = pillow_conversions[extension.lower()]
+
+        return extension.upper()
+
     def _get_or_create_thumbnail(self, source_file):
         """Resizes, saves, and retrieves thumbnails."""
         thumbnail_path = self._create_thumbnail_file_path(source_file.name)
@@ -58,8 +73,8 @@ class ThumbnailNode(Node):
             original_image.thumbnail((200, 200))
 
             # Save the image to the bytes object
-            # TODO: add handling to support native format
-            original_image.save(thumbnail_io, format='JPEG')
+            pillow_format = self._get_pillow_format(thumbnail_path)
+            original_image.save(thumbnail_io, format=pillow_format)
 
             # Save the bytes object as a Django File
             default_storage.save(

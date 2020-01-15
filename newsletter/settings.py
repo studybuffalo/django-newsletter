@@ -168,4 +168,24 @@ class NewsletterSettings(Settings):
 
         return None
 
+    @property
+    def THUMBNAIL_TEMPLATE(self):
+        """Returns the template snippet to use to display thumbnails."""
+        # Checks if user has specified a general thumbnail application
+        if self.THUMBNAIL == 'sorl-thumbnail':
+            return 'newsletter/message/thumbnail/sorl_thumbnail.html'
+
+        if self.THUMBNAIL == 'easy-thumbnails':
+            return 'newsletter/message/thumbnail/easy_thumbnails.html'
+
+        # Get the user-defined setting (if present)
+        NEWSLETTER_THUMBNAIL_TEMPLATE = getattr(
+            django_settings, "NEWSLETTER_THUMBNAIL_TEMPLATE", None
+        )
+
+        if NEWSLETTER_THUMBNAIL_TEMPLATE:
+            return NEWSLETTER_THUMBNAIL_TEMPLATE
+
+        return 'newsletter/message/thumbnail/newsletter.html'
+
 newsletter_settings = NewsletterSettings()

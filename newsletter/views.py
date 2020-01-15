@@ -597,6 +597,7 @@ class SubmissionArchiveDetailView(SubmissionViewBase, DateDetailView):
             'STATIC_URL': settings.STATIC_URL,
             'MEDIA_URL': settings.MEDIA_URL,
             'thumbnail_app': newsletter_settings.THUMBNAIL,
+            'thumbnail_template': newsletter_settings.THUMBNAIL_TEMPLATE,
         })
 
         return context

@@ -11,13 +11,7 @@
     {% for article in message.articles.all %}
         <h3>{{ article.title }}</h3>
 
-        {% if thumbnail_app == 'sorl-thumbnail' %}
-            {% include 'newsletter/message/message_article_sorl_thumbnail.html' %}
-        {% elif thumbnail_app == 'easy-thumbnails' %}
-            {% include 'newsletter/message/message_article_easy_thumbnails.html' %}
-        {% else %}
-            {% include 'newsletter/message/message_article_newsletter_thumbnail.html' %}
-        {% endif %}
+        {% include thumbnail_template %}
 
         <div>{{ article.text|safe }}</div>
 

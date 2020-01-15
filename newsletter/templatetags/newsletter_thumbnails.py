@@ -55,7 +55,10 @@ class ThumbnailNode(Node):
         pillow_conversions = {
             'jpg': 'JPEG'
         }
-        extension = pillow_conversions[extension.lower()]
+        try:
+            extension = pillow_conversions[extension.lower()]
+        except KeyError:
+            pass
 
         return extension.upper()
 

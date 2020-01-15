@@ -1,11 +1,24 @@
 from django.db.models import ImageField
 
+# Thumbnail apps are optional so imports do not need to pass
+try:
+    from sorl.thumbnail.fields import ImageField as SorlImageField
+except ImportError:
+    pass
+
+try:
+    from easy_thumbnails.fields import ThumbnailerImageField
+except ImportError:
+    pass
+
 from .settings import newsletter_settings
 
-# If a thumbnail class as set and successfully imported, will use it
-# Otherwise will use the Django ImageField as the default fallback
-if newsletter_settings.THUMBNAIL_MODEL_FIELD:
-    ParentClass = newsletter_settings.THUMBNAIL_MODEL_FIELD
+# Uses the model field provided by the thumbnailing application
+# If no application set, uses the Django ImageField as the fallback
+if newsletter_settings.THUMBNAIL == 'sorl-thumbnail':
+    ParentClass = SorlImageField
+elif newsletter_settings.THUMBNAIL == 'easy-thumbnails':
+    ParentClass = ThumbnailerImageField
 else:
     ParentClass = ImageField
 

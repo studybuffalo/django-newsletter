@@ -2,7 +2,6 @@ from importlib import import_module
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ImproperlyConfigured
-from django.db.models import ImageField as DjangoImageField
 
 
 from .utils import Singleton

@@ -1,12 +1,16 @@
 """Tests for the fields module."""
 import sys
-from importlib import reload
 
-# Conditional import for Python 2.7
+# Conditional imports for Python 2.7
+try:
+    from importlib import reload
+except:
+    pass
+
 try:
     from unittest.mock import patch, MagicMock, PropertyMock
 except ImportError:
-    from mock import patch, MagicMock
+    from mock import patch, MagicMock, PropertyMock
 
 from django.db.models import ImageField
 from django.test import TestCase

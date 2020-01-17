@@ -1,6 +1,5 @@
 """Tests for the templatetags module."""
 from io import BytesIO
-from unittest.mock import patch
 from shutil import rmtree
 
 # Conditionally import for Python 2.7 support

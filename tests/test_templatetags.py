@@ -40,7 +40,7 @@ TEMP_DIR_PATH = TEMP_DIR.name
 
 
 @override_settings(MEDIA_ROOT=TEMP_DIR_PATH)
-class ArticleTestCase(MailTestCase):
+class TemplateTestCase(MailTestCase):
     class MockSourceVariable:
         """Mocks the source_variable attribute for testing."""
         def __init__(self, source_image):

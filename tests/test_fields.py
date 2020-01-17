@@ -4,7 +4,7 @@ import sys
 # Conditional imports for Python 2.7
 try:
     from importlib import reload
-except:
+except ImportError:
     pass
 
 try:

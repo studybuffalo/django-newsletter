@@ -18,11 +18,11 @@ from django.test import TestCase
 from newsletter import fields
 
 class FieldsTestCase(TestCase):
-    class MockSorlThumbnailImageField:
+    class MockSorlThumbnailImageField(object):
         def __init__(self):
             self.parent_class = 'sorl-thumbnail'
 
-    class MockEasyThumbnailsImageField:
+    class MockEasyThumbnailsImageField(object):
         def __init__(self):
             self.parent_class = 'easy-thumbnails'
 

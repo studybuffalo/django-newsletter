@@ -33,7 +33,7 @@ class ThumbnailNode(Node):
 
         # Reconstruct the media folder for the original image
         # Uses the last 5 items because all files are uploaded with the
-        # same structure: newsletter/images/<year>/<month>/<day>)
+        # same structure: newsletter/images/<year>/<month>/<day>
         media_folder_path = image_folder_parts[-5:]
 
         # Combine media path parts and image name into one list
@@ -46,10 +46,10 @@ class ThumbnailNode(Node):
 
     def _get_pillow_format(self, thumbnail):
         """Converts thumbnail format to an acceptable Pillow format."""
-        _, raw_extension = os.path.splitext(thumbnail)
+        _, extension = os.path.splitext(thumbnail)
 
         # Remove "." from front of extension
-        extension = raw_extension[1:]
+        extension = extension[1:]
 
         # If necessary convert extension to Pillow format
         pillow_conversions = {
